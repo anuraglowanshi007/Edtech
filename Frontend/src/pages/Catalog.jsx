@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-
-// import CourseCard from "../components/Catalog/CourseCard"
-// import CourseSlider from "../components/Catalog/CourseSlider"
 import Footer from "../components/Common/Footer"
 import Course_Card from "../components/core/Catalog/Course_Card"
 import Course_Slider from "../components/core/Catalog/Course_Slider"
@@ -18,37 +15,44 @@ function Catalog() {
   const [active, setActive] = useState(1)
   const [catalogPageData, setCatalogPageData] = useState(null)
   const [categoryId, setCategoryId] = useState("")
+  
   // Fetch All Categories
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       try {
-        const res = await apiConnector("GET", categories.CATEGORIES_API)
-        const category_id = res?.data?.data?.filter(
-          (ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName
-        )[0]._id
-        setCategoryId(category_id)
-      } catch (error) {
-        console.log("Could not fetch Categories.", error)
-      }
-    })()
-  }, [catalogName])
-  useEffect(() => {
-    if (categoryId) {
-      ;(async () => {
-        try {
-          const res = await getCatalogPageData(categoryId)
-          setCatalogPageData(res)
-        } catch (error) {
-          console.log(error)
+        const res = await apiConnector("GET", categories.CATEGORIES_API);
+        console.log("Fetched Categories:", res?.data?.data);
+  
+        if (res?.data?.data?.length > 0) {
+          const category = res.data.data.find((ct) => {
+            const formattedName = ct?.name
+              ? ct.name.trim().replace(/\s+/g, "-").toLowerCase()
+              : "";
+            const formattedCategory = ct?.category
+              ? ct.category.trim().replace(/\s+/g, "-").toLowerCase()
+              : "";
+  
+            return formattedName === catalogName || formattedCategory === catalogName;
+          });
+  
+          console.log("Category Found:", category);
+  
+          if (category) {
+            setCategoryId(category._id);
+          } else {
+            console.error("❌ Category not found for:", catalogName);
+          }
         }
-      })()
-    }
-  }, [categoryId])
+      } catch (error) {
+        console.error("⚠️ Could not fetch Categories:", error);
+      }
+    })();
+  }, [catalogName]);
 
   if (loading || !catalogPageData) {
     return (
       <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
-        <div className="spinner"></div>
+        {/* <div className="spinner"></div> */}
       </div>
     )
   }
@@ -88,7 +92,7 @@ function Catalog() {
             } cursor-pointer`}
             onClick={() => setActive(1)}
           >
-            Most Populer
+            Most Popular
           </p>
           <p
             className={`px-4 py-2 ${
