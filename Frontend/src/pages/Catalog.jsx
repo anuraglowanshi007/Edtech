@@ -49,6 +49,19 @@ function Catalog() {
     })();
   }, [catalogName]);
 
+  // Fetch Catalog Page Data when categoryId changes
+  useEffect(() => {
+    if (!categoryId) return;
+    (async () => {
+      try {
+        const res = await getCatalogPageData(categoryId);
+        setCatalogPageData(res);
+      } catch (error) {
+        console.error("Could not fetch catalog page data:", error);
+      }
+    })();
+  }, [categoryId]);
+
   if (loading || !catalogPageData) {
     return (
       <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
