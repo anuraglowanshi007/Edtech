@@ -9,6 +9,9 @@ const AIbot = () => {
       <span>
             Fast Response
       </span>
+      <div>
+            fetech Data
+      </div>
     </div>
   )
 }
