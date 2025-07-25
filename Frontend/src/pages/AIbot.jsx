@@ -8,7 +8,20 @@ const AIbot = () => {
             
       }
   return (
-    <div>Integrate AI Bot</div>
+    <div>
+      <div>
+            Intergreate the Bot
+      </div>
+      <span>
+            Fast Response
+      </span>
+      <div>
+            fetech Data
+      </div>
+      <div>
+            Upload File
+      </div>
+    </div>
   )
 }
 
