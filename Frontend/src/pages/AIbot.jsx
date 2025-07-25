@@ -12,6 +12,9 @@ const AIbot = () => {
       <div>
             fetech Data
       </div>
+      <div>
+            Upload File
+      </div>
     </div>
   )
 }
